@@ -1,0 +1,285 @@
+---
+swagger: "2.0"
+info:
+  description: "Api team-mgmt"
+  version: "1.0.0"
+  title: "test"
+  termsOfService: ""
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /projects:
+    get:
+      summary: "List of projects"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/Project"
+    post:
+      summary: "Add a project"
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/components/schemas/Project"
+      responses:
+        201:
+          description: "Status 201"
+          headers:
+            "Location":
+              description: "Location of project created"
+              schema:
+                type: string
+          schema:
+            $ref: "#/components/schemas/Project"
+  /projects/{id}:
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      get:
+        summary: "Get one project"
+        responses:
+          200:
+            description: "Status 200"
+            schema:
+              $ref: "#/components/schemas/Project"
+          404:
+            $ref: "#/components/responses/notFound"
+      put:
+        summary: "Modify a project"
+        parameters:
+        - name: "body"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Project"
+        responses:
+          200:
+            description: "Status 200"
+          404:
+            $ref: "#/components/responses/notFound"
+      delete:
+        summary: "Delete one project"
+        parameters: []
+        responses:
+          200:
+            description: "Status 200"
+          404:
+            $ref: "#/components/responses/notFound"
+  /projects/{id}/customers:
+    get:
+      summary: "List of customers"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            type: "array"
+            items:
+            $ref: "#/components/schemas/Customer"
+        404:
+          $ref: "#/components/responses/notFound"
+    post:
+      summary: "Add a customer to a project"
+      responses:
+        201:
+          description: "Status 201"
+          headers:
+            "Location":
+              description: "Location of customer created"
+              schema:
+                type: string
+          schema:
+            $ref: "#/components/schemas/Customer"
+  /projects/{id}/customers/{id}:
+    get:
+      summary: "Get a member from project"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            $ref: "#/components/schemas/Customer"
+        404:
+          $ref: "#/components/responses/notFound"
+    delete:
+      summary: "Delete a member from project"
+      responses:
+        200:
+          description: "Status 200"
+        404:
+          $ref: "#/components/responses/notFound"
+  /projects/{id}/teams:
+    get:
+      summary: "List of teams of project"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/Team"
+        404:
+          $ref: "#/components/responses/notFound"
+    post:
+      summary: "Add a team"
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/components/schemas/Team"
+      responses:
+        201:
+          description: "Status 201"
+          headers:
+            "Location":
+              description: "Location of team created"
+              schema:
+                type: string
+          schema:
+            $ref: "#/components/schemas/Team"
+        404:
+          $ref: "#/components/responses/notFound"
+  /projects/{id}/teams/{id}:
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      get:
+        summary: "Get a team"
+        responses:
+          200:
+            description: "Status 200"
+            schema:
+              $ref: "#/components/schemas/Team"
+          404:
+            $ref: "#/components/responses/notFound"
+      put:
+        summary: "Modify a team"
+        responses:
+          200:
+            description: "Status 200"
+            schema:
+              $ref: "#/components/schemas/Team"
+          404:
+            $ref: "#/components/responses/notFound"
+      delete:
+        summary: "Delete a team"
+        responses:
+          200:
+            description: "Status 200"
+          404:
+            $ref: "#/components/responses/notFound"
+  /projects/{id}/teams/{id}/members:
+    get:
+      summary: "Get list of team members"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Employee"
+        404:
+          $ref: "#/components/responses/notFound"
+    post:
+      summary: "Add a member to the team"
+      responses:
+        201:
+          description: "Status 200"
+          headers:
+            "Location":
+              description: "Location of team created"
+              schema:
+                type: string
+          schema:
+            $ref: "#/components/schemas/Employee"
+
+  /projects/{id}/teams/{id}/members/{id}:
+    get:
+      summary: "Get a member"
+      responses:
+        200:
+          description: "Status 200"
+          schema:
+            $ref: "#/components/schemas/Employee"
+        404:
+          $ref: "#/components/responses/notFound"
+    delete:
+      summary: "Delete an member"
+      responses:
+        200:
+          description: "Status 200"
+        404:
+          $ref: "#/components/responses/notFound"
+
+components:
+  schemas:
+    Project:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+          description: "name of the project"
+        description:
+          type: "string"
+          description: "description of the project"
+        customer:
+          $ref: "#/components/schemas/Customer"
+    Customer:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+    Team:
+      type: "object"
+      required:
+      - "name"
+      properties:
+        name:
+          type: "string"
+        project:
+          $ref: "#/components/schemas/Project"
+        members:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Employee"
+    Employee:
+      type: "object"
+      required:
+      - "firstname"
+      - "id"
+      - "lastname"
+      properties:
+        id:
+          type: "number"
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+        function:
+          type: "string"
+          description: "'Project manager', 'Project leader', 'Scrum master', 'Team leader',\
+            \ 'Developer', 'Architect', 'Analyst'"
+  responses:
+    notFound:
+      description: "Not found"
+
+
+
