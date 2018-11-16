@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   description: "Api team-mgmt"
   version: "1.0.0"
-  title: "test"
+  title: "Api for manage project teram"
   termsOfService: ""
 schemes:
 - http
@@ -21,7 +21,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/components/schemas/Project"
+              $ref: "//#/definitions/schemas/Project"
     post:
       summary: "Add a project"
       parameters:
@@ -29,17 +29,17 @@ paths:
         in: "body"
         required: true
         schema:
-          $ref: "#/components/schemas/Project"
+          $ref: "/#/definitions/schemas/Project"
       responses:
         201:
           description: "Status 201"
           headers:
-            "Location":
-              description: "Location of project created"
-              schema:
-                type: string
+            name: "Location"
+            description: "Location of team created"
+            schema:
+              type: string
           schema:
-            $ref: "#/components/schemas/Project"
+            $ref: "/#/definitions/schemas/Project"
   /projects/{id}:
       parameters:
       - name: "id"
@@ -52,9 +52,9 @@ paths:
           200:
             description: "Status 200"
             schema:
-              $ref: "#/components/schemas/Project"
+              $ref: "/#/definitions/schemas/Project"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
       put:
         summary: "Modify a project"
         parameters:
@@ -62,12 +62,12 @@ paths:
           in: "body"
           required: true
           schema:
-            $ref: "#/components/schemas/Project"
+            $ref: "/#/definitions/schemas/Project"
         responses:
           200:
             description: "Status 200"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
       delete:
         summary: "Delete one project"
         parameters: []
@@ -75,7 +75,7 @@ paths:
           200:
             description: "Status 200"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
   /projects/{id}/customers:
     get:
       summary: "List of customers"
@@ -85,21 +85,21 @@ paths:
           schema:
             type: "array"
             items:
-            $ref: "#/components/schemas/Customer"
+            $ref: "/#/definitions/schemas/Customer"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
     post:
       summary: "Add a customer to a project"
       responses:
         201:
           description: "Status 201"
           headers:
-            "Location":
-              description: "Location of customer created"
-              schema:
-                type: string
+            name: "Location"
+            description: "Location of team created"
+            schema:
+              type: string
           schema:
-            $ref: "#/components/schemas/Customer"
+            $ref: "/#/definitions/schemas/Customer"
   /projects/{id}/customers/{id}:
     get:
       summary: "Get a member from project"
@@ -107,16 +107,16 @@ paths:
         200:
           description: "Status 200"
           schema:
-            $ref: "#/components/schemas/Customer"
+            $ref: "/#/definitions/schemas/Customer"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
     delete:
       summary: "Delete a member from project"
       responses:
         200:
           description: "Status 200"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
   /projects/{id}/teams:
     get:
       summary: "List of teams of project"
@@ -126,9 +126,9 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/components/schemas/Team"
+              $ref: "/#/definitions/schemas/Team"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
     post:
       summary: "Add a team"
       parameters:
@@ -136,19 +136,19 @@ paths:
         in: "body"
         required: true
         schema:
-          $ref: "#/components/schemas/Team"
+          $ref: "/#/definitions/schemas/Team"
       responses:
         201:
           description: "Status 201"
           headers:
-            "Location":
-              description: "Location of team created"
-              schema:
-                type: string
+            name: "Location"
+            description: "Location of team created"
+            schema:
+              type: string
           schema:
-            $ref: "#/components/schemas/Team"
+            $ref: "/#/definitions/schemas/Team"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
   /projects/{id}/teams/{id}:
       parameters:
       - name: "id"
@@ -161,25 +161,25 @@ paths:
           200:
             description: "Status 200"
             schema:
-              $ref: "#/components/schemas/Team"
+              $ref: "/#/definitions/schemas/Team"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
       put:
         summary: "Modify a team"
         responses:
           200:
             description: "Status 200"
             schema:
-              $ref: "#/components/schemas/Team"
+              $ref: "/#/definitions/schemas/Team"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
       delete:
         summary: "Delete a team"
         responses:
           200:
             description: "Status 200"
           404:
-            $ref: "#/components/responses/notFound"
+            $ref: "/#/definitions/responses/notFound"
   /projects/{id}/teams/{id}/members:
     get:
       summary: "Get list of team members"
@@ -189,22 +189,21 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/components/schemas/Employee"
+              $ref: "/#/definitions/schemas/Employee"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
     post:
       summary: "Add a member to the team"
       responses:
         201:
           description: "Status 200"
           headers:
-            "Location":
-              description: "Location of team created"
-              schema:
-                type: string
+            name : "Location"
+            description: "Location of team created"
+            schema:
+              type: string
           schema:
-            $ref: "#/components/schemas/Employee"
-
+            $ref: "/#/definitions/schemas/Employee"
   /projects/{id}/teams/{id}/members/{id}:
     get:
       summary: "Get a member"
@@ -212,18 +211,18 @@ paths:
         200:
           description: "Status 200"
           schema:
-            $ref: "#/components/schemas/Employee"
+            $ref: "/#/definitions/schemas/Employee"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
     delete:
       summary: "Delete an member"
       responses:
         200:
           description: "Status 200"
         404:
-          $ref: "#/components/responses/notFound"
+          $ref: "/#/definitions/responses/notFound"
 
-components:
+definitions:
   schemas:
     Project:
       type: "object"
@@ -237,7 +236,7 @@ components:
           type: "string"
           description: "description of the project"
         customer:
-          $ref: "#/components/schemas/Customer"
+          $ref: "/#/definitions/schemas/Customer"
     Customer:
       type: "object"
       properties:
@@ -255,11 +254,11 @@ components:
         name:
           type: "string"
         project:
-          $ref: "#/components/schemas/Project"
+          $ref: "/#/definitions/schemas/Project"
         members:
           type: "array"
           items:
-            $ref: "#/components/schemas/Employee"
+            $ref: "/#/definitions/schemas/Employee"
     Employee:
       type: "object"
       required:
