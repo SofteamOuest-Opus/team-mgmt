@@ -25,6 +25,30 @@ Pas encore de support natif de import dans CommonJS et de require dans ECMA
 --> utiliser Babel
 
 ## Framework building REST API
-Express Koa
+Express ou Koa
+https://raygun.com/blog/koa-vs-express-2018/
+
 ## Gestion montée version bdd
 node-flywaydb
+
+
+## Génération du squelette applicatif
+npm install express-generator -g
+express --view=pug myapp
+
+
+## specifications
+
+
+Log:
+Utiliser l
+
+Resource REST :
+Créer un fichier *Routes. 
+Chaque fichier route doit etre prefixé de l'entité gérée, en camel case. Exemple teamsRoutes
+Chaque fichier route doit être importée dans server.js et prendre en paramètre ou injecter la constante app.
+Chaque route doit produire un log en entrée et en sortie avec l'objet en entrée/sortie.
+
+
+   
+ 

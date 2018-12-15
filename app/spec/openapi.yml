@@ -119,7 +119,7 @@ paths:
           $ref: "/#/definitions/responses/notFound"
   /projects/{id}/teams:
     get:
-      summary: "List of teams of project"
+      summary: "List of teamsRoutes of project"
       responses:
         200:
           description: "Status 200"
