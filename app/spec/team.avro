@@ -16,7 +16,7 @@
       {
         "name": "members",
         "type": {
-          "type": ["array"],
+          "type": "array",
           "items": {
             "namespace": "fr.opus.orga.teammgmt",
             "type": "record",

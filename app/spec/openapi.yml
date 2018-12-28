@@ -14,271 +14,246 @@ produces:
 paths:
   /projects:
     get:
-      summary: "List of projects"
+      summary: List of projects
+      operationId: listProjects
       responses:
         200:
-          description: "Status 200"
-          schema:
-            type: "array"
-            items:
-              $ref: "/#/definitions/schemas/Project"
+          description: List of all projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/schemas/Project"
     post:
-      summary: "Add a project"
+      summary: Add a project
       parameters:
-      - name: "body"
-        in: "body"
+      - name: body
+        in: body
         required: true
         schema:
-          $ref: "/#/definitions/schemas/Project"
+          $ref: "#/definitions/schemas/Project"
       responses:
         201:
-          description: "Status 201"
+          description: Project successfully created
           headers:
-            name: "Location"
-            description: "Location of team created"
+            name: Location
+            description: Location of project created
             schema:
               type: string
-          schema:
-            $ref: "/#/definitions/schemas/Project"
   /projects/{id}:
-      parameters:
-      - name: "id"
-        in: "path"
-        required: true
-        type: "string"
       get:
-        summary: "Get one project"
-        responses:
-          200:
-            description: "Status 200"
-            schema:
-              $ref: "/#/definitions/schemas/Project"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-      put:
-        summary: "Modify a project"
+        summary: Get one project by id
         parameters:
-        - name: "body"
-          in: "body"
-          required: true
-          schema:
-            $ref: "/#/definitions/schemas/Project"
-        responses:
-          200:
-            description: "Status 200"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-      delete:
-        summary: "Delete one project"
-        parameters: []
-        responses:
-          200:
-            description: "Status 200"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-  /projects/{id}/customers:
-    get:
-      summary: "List of customers"
-      responses:
-        200:
-          description: "Status 200"
-          schema:
-            type: "array"
-            items:
-            $ref: "/#/definitions/schemas/Customer"
-        404:
-          $ref: "/#/definitions/responses/notFound"
-    post:
-      summary: "Add a customer to a project"
-      responses:
-        201:
-          description: "Status 201"
-          headers:
-            name: "Location"
-            description: "Location of team created"
+          - name: id
+            description: id of the project to found
+            in: path
+            required: true
             schema:
               type: string
-          schema:
-            $ref: "/#/definitions/schemas/Customer"
-  /projects/{id}/customers/{id}:
-    get:
-      summary: "Get a member from project"
-      responses:
-        200:
-          description: "Status 200"
-          schema:
-            $ref: "/#/definitions/schemas/Customer"
-        404:
-          $ref: "/#/definitions/responses/notFound"
-    delete:
-      summary: "Delete a member from project"
-      responses:
-        200:
-          description: "Status 200"
-        404:
-          $ref: "/#/definitions/responses/notFound"
+        responses:
+          200:
+            description: Project matching id found
+            content:
+              application/json:
+                schema:
+                  $ref: "#/definitions/schemas/Project"
+          404:
+            description: Project matching id not found
+      put:
+        summary: Modify a project
+        parameters:
+          - name: id
+            description: id of the project to found
+            in: path
+            required: true
+            schema:
+              type: string
+          - name: body
+            in: body
+            required: true
+            schema:
+              $ref: "#/definitions/schemas/Project"
+        responses:
+          200:
+            description: Project successfully modified
+          404:
+            description: Project matching id not found
+
+      delete:
+        summary: Delete one project
+        parameters:
+          - name: id
+            description: id of the project to delete
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: Project successfully deleted
+          404:
+            description: Project matching id not found
+
   /projects/{id}/teams:
     get:
-      summary: "List of teamsRoutes of project"
+      summary: List of teams of project
+      parameters:
+        - name: id
+          description: id of the project to search
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
-          description: "Status 200"
-          schema:
-            type: "array"
-            items:
-              $ref: "/#/definitions/schemas/Team"
+          description: List of teams of project
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/schemas/Team"
         404:
-          $ref: "/#/definitions/responses/notFound"
+          description: No team for this project
     post:
-      summary: "Add a team"
+      summary: Add a team to a project
       parameters:
-      - name: "body"
-        in: "body"
+      - name: id
+        description: id of the project
+        in: path
         required: true
         schema:
-          $ref: "/#/definitions/schemas/Team"
-      responses:
-        201:
-          description: "Status 201"
-          headers:
-            name: "Location"
-            description: "Location of team created"
-            schema:
-              type: string
-          schema:
-            $ref: "/#/definitions/schemas/Team"
-        404:
-          $ref: "/#/definitions/responses/notFound"
-  /projects/{id}/teams/{id}:
-      parameters:
-      - name: "id"
-        in: "path"
+          type: string
+      - name: body
+        in: body
         required: true
-        type: "string"
-      get:
-        summary: "Get a team"
-        responses:
-          200:
-            description: "Status 200"
-            schema:
-              $ref: "/#/definitions/schemas/Team"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-      put:
-        summary: "Modify a team"
-        responses:
-          200:
-            description: "Status 200"
-            schema:
-              $ref: "/#/definitions/schemas/Team"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-      delete:
-        summary: "Delete a team"
-        responses:
-          200:
-            description: "Status 200"
-          404:
-            $ref: "/#/definitions/responses/notFound"
-  /projects/{id}/teams/{id}/members:
-    get:
-      summary: "Get list of team members"
-      responses:
-        200:
-          description: "Status 200"
-          schema:
-            type: array
-            items:
-              $ref: "/#/definitions/schemas/Employee"
-        404:
-          $ref: "/#/definitions/responses/notFound"
-    post:
-      summary: "Add a member to the team"
+        schema:
+          $ref: "#/definitions/schemas/Team"
       responses:
         201:
-          description: "Status 200"
+          description: Team added successfully
           headers:
-            name : "Location"
-            description: "Location of team created"
+            name: Location
+            description: Location of team created
             schema:
               type: string
-          schema:
-            $ref: "/#/definitions/schemas/Employee"
-  /projects/{id}/teams/{id}/members/{id}:
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
+        404:
+          description: No project matching id
+        400:
+          description: Error when adding the team
+
+  /teams/{id}:
     get:
-      summary: "Get a member"
+      summary: Get a team
+      parameters:
+      - name: id
+        description: id of the team to search
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         200:
-          description: "Status 200"
+          description: Team matching id found
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
+        404:
+          description: Team matching id not found
+
+    put:
+      summary: Modify a team with his members
+      parameters:
+        - name: id
+          description: id of the team to search
+          in: path
+          required: true
           schema:
-            $ref: "/#/definitions/schemas/Employee"
-        404:
-          $ref: "/#/definitions/responses/notFound"
-    delete:
-      summary: "Delete an member"
+            type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/schemas/Team"
       responses:
         200:
-          description: "Status 200"
+          description: Team successfully modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
         404:
-          $ref: "/#/definitions/responses/notFound"
+          description: Team matching id not found
+        400:
+          description: Error when modifying team
+    delete:
+      summary: Delete a team
+      parameters:
+        - name: id
+          description: id of the team to search
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Team successfully deleted
+        404:
+          description: Team matching id not found
+        400:
+          description: Error when deleting team
 
 definitions:
   schemas:
     Project:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-        name:
-          type: "string"
-          description: "name of the project"
-        description:
-          type: "string"
-          description: "description of the project"
-        customer:
-          $ref: "/#/definitions/schemas/Customer"
-    Customer:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        firstname:
-          type: "string"
-        lastname:
-          type: "string"
-    Team:
-      type: "object"
+      type: object
       required:
-      - "name"
+        - name
+      properties:
+        id:
+          type: integer
+          description: id of the project
+        name:
+          type: string
+          description: name of the project
+        description:
+          type: string
+          description: description of the project
+        tenant:
+          type: string
+          description: tenant name of the project
+    Team:
+      type: object
+      required:
+      - name
       properties:
         name:
-          type: "string"
+          type: string
         project:
-          $ref: "/#/definitions/schemas/Project"
+          $ref: "#/definitions/schemas/Project"
         members:
-          type: "array"
+          type: array
           items:
-            $ref: "/#/definitions/schemas/Employee"
+            $ref: "#/definitions/schemas/Employee"
     Employee:
       type: "object"
       required:
-      - "firstname"
-      - "id"
-      - "lastname"
+      - id
+      - firstname
+      - lastname
       properties:
         id:
-          type: "string"
+          type: string
         firstname:
-          type: "string"
+          type: string
         lastname:
-          type: "string"
-        function:
-          type: "string"
-          description: "'Project manager', 'Project leader', 'Scrum master', 'Team leader',\
-            \ 'Developer', 'Architect', 'Analyst'"
-  responses:
-    notFound:
-      description: "Not found"
+          type: string
 
 
 
