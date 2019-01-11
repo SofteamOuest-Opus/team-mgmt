@@ -1,6 +1,7 @@
 import { loadTeamType } from '../common/AvroTypeLoader';
 import { assertValid } from './TeamValidator';
 import customLogger from '../config/CustomLogger';
+import {createTeam} from '../config/TeamDAO';
 var logger = customLogger();
 export function saveTeam(team) {
     const type = loadTeamType();
@@ -9,6 +10,7 @@ export function saveTeam(team) {
         const buffer = type.toBuffer(team);
         logger.info({message:'save team' + buffer});
         //TODO : send to postgres and kafka
+        createTeam(team.name);
         return team;
 
     }else{
