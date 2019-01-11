@@ -9,6 +9,10 @@
         "type": "string"
       },
       {
+        "name": "name",
+        "type": "string"
+      },
+      {
         "name": "project",
         "type": ["null","string"],
         "default": null

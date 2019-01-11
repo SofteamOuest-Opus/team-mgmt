@@ -41,7 +41,7 @@ express --view=pug myapp
 
 
 Log:
-Utiliser l
+Utiliser CustomLogger
 
 Resource REST :
 Créer un fichier *Routes. 

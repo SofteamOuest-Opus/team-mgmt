@@ -1,18 +1,13 @@
 'use strict';
-import customLogger from '../config/customLogger';
+import customLogger from '../config/CustomLogger';
+var logger = customLogger();
 
-export default class TeamValidator {
-    constructor(){
-        const customLogger = customLogger();
-    }
-    assertValid = (obj, type) => type.isValid(obj, {
-
+export function assertValid(obj, type) {
+    const valid = type.isValid(obj, {
         noUndeclaredFields: true,
         errorHook: (childObj, childType, path) => {
-            customLogger.error({message: path})
-
-            throw new Error('invalid ' + path);
+            logger.info({message: 'error when validate ' + path });
         }
-    })
-}
-
+    });
+    return valid;
+};

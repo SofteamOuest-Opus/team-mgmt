@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
-import teamsRoutes from './routes/teamsRoutes';
+import teamsRoutes from './routes/TeamsRoutes';
 import express from 'express';
-import logger from './config/customLogger';
+import logger from './config/CustomLogger';
 
 const app = express();
 
