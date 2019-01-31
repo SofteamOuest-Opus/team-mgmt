@@ -1,14 +1,19 @@
 import {loadTeamType} from '../common/AvroTypeLoader';
 import {assertValid} from './TeamValidator';
 import customLogger from '../config/CustomLogger';
-import {createTeam, getAllTeam, getTeam} from '../models/Team';
 import connexion from '../config/connexion';
+import TeamDAO from '../models/TeamDAO';
 
 var logger = customLogger();
 
-export async function save(team) {
+export default class TeamManager {
 
-    // connexion.transaction(t => {
+    constructor() {
+       this.teamDAO = new TeamDAO();
+    }
+
+    save = function (team) {
+        // connexion.transaction(t => {
         //const type = loadTeamType();
         //const valid = assertValid(team, type);
         var valid = true;
@@ -19,7 +24,7 @@ export async function save(team) {
             //const buffer = type.toBuffer(team);
             //logger.info({message:'save team' + buffer});
             //TODO : send  kafka
-            createTeam(team);
+            this.teamDAO.createTeam(team);
             return team;
 
         } else {
@@ -27,15 +32,17 @@ export async function save(team) {
             return {'error': 'team is not valid'};
         }
 
-    // })
+        // })
 //
-};
+    };
 
 
-export async function get(id) {
-    return getTeam(id);
-}
+    get = function (id) {
+        return this.teamDAO.getTeam(id);
+    }
 
-export async function getAll() {
-    return getAllTeam();
+    getAll = function () {
+        return this.teamDAO.getAllTeam();
+    }
+
 }
