@@ -6,39 +6,36 @@ import {createTeam, getAllTeam, getTeam} from '../models/TeamDAO';
 
 var logger = customLogger();
 
-export default class TeamManager {
 
+export function save(team) {
+    //connexion.transaction(t => {
 
-    save = function (team) {
-        //connexion.transaction(t => {
+    var valid = true;
+    if (!team.name) {
+        valid = false;
+    }
+    if (!valid) {
+        logger.error({message: 'team is not valid'});
+        return {'error': 'team is not valid'};
+    } else {
+        //const buffer = type.toBuffer(team);
+        //logger.info({message:'save team' + buffer});
+        //TODO : send  kafka
+        createTeam(team);
+        return team;
 
-        var valid = true;
-        if (!team.name) {
-            valid = false;
-        }
-        if (!valid) {
-            logger.error({message: 'team is not valid'});
-            return {'error': 'team is not valid'};
-        } else {
-            //const buffer = type.toBuffer(team);
-            //logger.info({message:'save team' + buffer});
-            //TODO : send  kafka
-            createTeam(team);
-            return team;
+    }
 
-        }
-
-        // })
+    // })
 //
-    };
+};
 
 
-    get = function (id) {
-        return getTeam(id);
-    }
-
-    getAll = function () {
-        return getAllTeam();
-    }
-
+export function get(id) {
+    return getTeam(id);
 }
+
+export function getAll() {
+    return getAllTeam();
+}
+

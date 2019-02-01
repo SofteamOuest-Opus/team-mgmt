@@ -1,12 +1,13 @@
 import express from 'express';
-import {TeamManager} from '../producers/TeamManager';
+
 import customLogger from '../config/CustomLogger';
+import {getAll, save, get} from '../producers/TeamManager';
 
 const logger = customLogger();
-const teamManager = new TeamManager();
 
 export default function (app) {
     const router = express.Router();
+
 
     router.use((req, res, next) => {
         //${info.timestamp}-${info.level}-${info.logger}-${info.code}-${info.correlationId}-${info.message}-${info.stackTrace}
@@ -20,7 +21,7 @@ export default function (app) {
     });
 
     router.get('/teams/:id', async (req, res, next) => {
-        let team = await teamManager.get(req.params.id);
+        let team = await get(req.params.id);
         res.json(team);
         next();
     }, async (req, res, next) => {
@@ -29,7 +30,7 @@ export default function (app) {
 
 
     router.get('/teams', async (req, res, next) => {
-        let teams = await teamManager.getAll();
+        let teams = await getAll();
         res.json(teams);
         next();
     }, async (req, res, next) => {
@@ -39,7 +40,7 @@ export default function (app) {
 
     router.put('/teams/:id', async (req, res, next) => {
         let team = await req.body;
-        const promise = await teamManager.save(team);
+        const promise = await save(team);
         const json = res.json(promise);
         return json;
     });
