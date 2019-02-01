@@ -1,31 +1,29 @@
 import connexion from '../config/connexion';
 import * as Sequelize from 'sequelize/lib/data-types';
 
-class TeamDAO {
-    constructor() {
-        this.Team = connexion.define('team', {
-            id: {
-                type: Sequelize.INTEGER,
-                primaryKey: true,
-                autoIncrement: true
-            },
-            name: {
-                type: Sequelize.STRING
-            }
-        });
-    }
 
-    createTeam(team) {
-        this.Team.create(team);
+const Team = connexion.define('team', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    name: {
+        type: Sequelize.STRING
     }
+});
 
-    getTeam(id) {
-        return this.Team.findByPk(id);
-    }
 
-    getAllTeam() {
-        return this.Team.findAll();
-    }
+export function createTeam(team) {
+    Team.create(team);
 }
 
-export default TeamDAO;
+export function getTeam(id) {
+    return Team.findByPk(id);
+}
+
+export function getAllTeam() {
+    return Team.findAll();
+}
+
+
