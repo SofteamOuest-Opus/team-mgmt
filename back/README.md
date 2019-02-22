@@ -49,6 +49,17 @@ Chaque fichier route doit etre prefixé de l'entité gérée, en camel case. Exe
 Chaque fichier route doit être importée dans server.js et prendre en paramètre ou injecter la constante app.
 Chaque route doit produire un log en entrée et en sortie avec l'objet en entrée/sortie.
 
+Fichier de migration sql:
+Créer un fichier dans le dossier back/docker/flyway/migration
+
+## Docker execution
+Le lancement des différents composants se fait dans cet ordre :
+
+BACK :
+- un container docker postgresql pour la bdd
+- un container docker flyway attend la bdd pour lancer les scripts de migration
+- un container docker lance un kafka
+- un container docker node fait un npm run start
 
    
  

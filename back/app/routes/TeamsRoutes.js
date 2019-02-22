@@ -1,12 +1,9 @@
-import express from 'express';
-
 import customLogger from '../config/CustomLogger';
 import {getAll, save, get} from '../producers/TeamManager';
 
 const logger = customLogger();
 
-export default function (app) {
-    const router = express.Router();
+export default function (app, router, keycloak) {
 
 
     router.use((req, res, next) => {
@@ -20,7 +17,7 @@ export default function (app) {
         next();
     });
 
-    router.get('/teams/:id', async (req, res, next) => {
+    router.get('/teams/:id', keycloak.protect(), async (req, res, next) => {
         let team = await get(req.params.id);
         res.json(team);
         next();
@@ -29,7 +26,7 @@ export default function (app) {
     });
 
 
-    router.get('/teams', async (req, res, next) => {
+    router.get('/teams', keycloak.protect(), async (req, res, next) => {
         let teams = await getAll();
         res.json(teams);
         next();
@@ -40,9 +37,13 @@ export default function (app) {
 
     router.put('/teams/:id', async (req, res, next) => {
         let team = await req.body;
+
+        logger.info({message: 'team:' + JSON.stringify(team)});
         const promise = await save(team);
         const json = res.json(promise);
-        return json;
+        next();
+    }, async (req, res, next) => {
+        next();
     });
     app.use('/', router);
 
