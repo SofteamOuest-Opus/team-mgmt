@@ -58,8 +58,10 @@ Le lancement des différents composants se fait dans cet ordre :
 BACK :
 - un container docker postgresql pour la bdd
 - un container docker flyway attend la bdd pour lancer les scripts de migration
+- un container docker lance un keycloak
 - un container docker lance un kafka
 - un container docker node fait un npm run start
+
 
    
  

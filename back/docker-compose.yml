@@ -1,0 +1,73 @@
+version: '2.0'
+
+services:
+
+  team-mgmt-bdd:
+    container_name: team-mgmt-bdd
+    build: docker/bdd
+    image: team-mgmt-bdd
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+
+  team-mgmt-flyway:
+    container_name: team-mgmt-flyway
+    build: docker/flyway
+    image: team-mgmt-flyway
+    depends_on:
+    - team-mgmt-bdd
+
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka
+    ports:
+      - "9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.44.10.50
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "users:1:1:compact"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+#  team-mgmt-api:
+#    container_name: team-mgmt-api
+#    build: .
+#    image: team-mgmt-api
+#    expose:
+#      - "3000"
+#    ports:
+#      - "3000:3000"
+#    entrypoint: /apps/teams/docker-entrypoint.sh
+
+  postgres-keycloak:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+    ports:
+      - 9080:8080
+    depends_on:
+      - postgres-keycloak
+
+

@@ -1,0 +1,62 @@
+'use strict';
+
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _TeamsRoutes = require('./routes/TeamsRoutes');
+
+var _TeamsRoutes2 = _interopRequireDefault(_TeamsRoutes);
+
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
+var _CustomLogger = require('./config/CustomLogger');
+
+var _CustomLogger2 = _interopRequireDefault(_CustomLogger);
+
+var _expressSession = require('express-session');
+
+var _expressSession2 = _interopRequireDefault(_expressSession);
+
+var _keycloakConnect = require('keycloak-connect');
+
+var _keycloakConnect2 = _interopRequireDefault(_keycloakConnect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const app = (0, _express2.default)();
+const router = _express2.default.Router();
+
+const memoryStore = new _expressSession2.default.MemoryStore();
+
+const keycloak = new _keycloakConnect2.default({
+    store: memoryStore
+});
+
+const sessionOptions = {
+    secret: 'd2188556-28d1-445f-8775-7fd64d3457c6',
+    bearerOnly: true,
+    resave: false,
+    saveUninitialized: true,
+    store: memoryStore
+};
+
+app.use((0, _expressSession2.default)(sessionOptions));
+app.use(keycloak.middleware());
+app.use(router);
+//chargement de l'api teamsRoutes
+(0, _TeamsRoutes2.default)(app, router, keycloak);
+
+//lancement du serveur
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+
+app.use(_bodyParser2.default.urlencoded({ extended: false }));
+app.use(_bodyParser2.default.json());
+
+//chargemetn des loggers
+(0, _CustomLogger2.default)();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL2FwcC9zZXJ2ZXIuanMiXSwibmFtZXMiOlsiYXBwIiwicm91dGVyIiwiZXhwcmVzcyIsIlJvdXRlciIsIm1lbW9yeVN0b3JlIiwic2Vzc2lvbiIsIk1lbW9yeVN0b3JlIiwia2V5Y2xvYWsiLCJLZXljbG9hayIsInN0b3JlIiwic2Vzc2lvbk9wdGlvbnMiLCJzZWNyZXQiLCJiZWFyZXJPbmx5IiwicmVzYXZlIiwic2F2ZVVuaW5pdGlhbGl6ZWQiLCJ1c2UiLCJtaWRkbGV3YXJlIiwibGlzdGVuIiwiY29uc29sZSIsImxvZyIsImJvZHlQYXJzZXIiLCJ1cmxlbmNvZGVkIiwiZXh0ZW5kZWQiLCJqc29uIl0sIm1hcHBpbmdzIjoiOztBQUFBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUNBOzs7O0FBQ0E7Ozs7QUFDQTs7Ozs7O0FBR0EsTUFBTUEsTUFBTSx3QkFBWjtBQUNBLE1BQU1DLFNBQVNDLGtCQUFRQyxNQUFSLEVBQWY7O0FBRUEsTUFBTUMsY0FBYyxJQUFJQyx5QkFBUUMsV0FBWixFQUFwQjs7QUFFQSxNQUFNQyxXQUFXLElBQUlDLHlCQUFKLENBQWE7QUFDMUJDLFdBQU9MO0FBRG1CLENBQWIsQ0FBakI7O0FBTUEsTUFBTU0saUJBQWlCO0FBQ25CQyxZQUFRLHNDQURXO0FBRW5CQyxnQkFBWSxJQUZPO0FBR25CQyxZQUFRLEtBSFc7QUFJbkJDLHVCQUFtQixJQUpBO0FBS25CTCxXQUFPTDtBQUxZLENBQXZCOztBQVFBSixJQUFJZSxHQUFKLENBQVEsOEJBQVFMLGNBQVIsQ0FBUjtBQUNBVixJQUFJZSxHQUFKLENBQVFSLFNBQVNTLFVBQVQsRUFBUjtBQUNBaEIsSUFBSWUsR0FBSixDQUFRZCxNQUFSO0FBQ0E7QUFDQSwyQkFBWUQsR0FBWixFQUFpQkMsTUFBakIsRUFBeUJNLFFBQXpCOztBQUVBO0FBQ0FQLElBQUlpQixNQUFKLENBQVcsSUFBWCxFQUFpQixNQUFNO0FBQ25CQyxZQUFRQyxHQUFSLENBQVksNkJBQVo7QUFDSCxDQUZEOztBQUlBbkIsSUFBSWUsR0FBSixDQUFRSyxxQkFBV0MsVUFBWCxDQUFzQixFQUFDQyxVQUFVLEtBQVgsRUFBdEIsQ0FBUjtBQUNBdEIsSUFBSWUsR0FBSixDQUFRSyxxQkFBV0csSUFBWCxFQUFSOztBQUVBO0FBQ0EiLCJmaWxlIjoic2VydmVyLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGJvZHlQYXJzZXIgZnJvbSAnYm9keS1wYXJzZXInO1xyXG5pbXBvcnQgdGVhbXNSb3V0ZXMgZnJvbSAnLi9yb3V0ZXMvVGVhbXNSb3V0ZXMnO1xyXG5pbXBvcnQgZXhwcmVzcyBmcm9tICdleHByZXNzJztcclxuaW1wb3J0IGxvZ2dlciBmcm9tICcuL2NvbmZpZy9DdXN0b21Mb2dnZXInO1xyXG5pbXBvcnQgc2Vzc2lvbiBmcm9tICdleHByZXNzLXNlc3Npb24nO1xyXG5pbXBvcnQgS2V5Y2xvYWsgZnJvbSAna2V5Y2xvYWstY29ubmVjdCc7XHJcblxyXG5cclxuY29uc3QgYXBwID0gZXhwcmVzcygpO1xyXG5jb25zdCByb3V0ZXIgPSBleHByZXNzLlJvdXRlcigpO1xyXG5cclxuY29uc3QgbWVtb3J5U3RvcmUgPSBuZXcgc2Vzc2lvbi5NZW1vcnlTdG9yZSgpO1xyXG5cclxuY29uc3Qga2V5Y2xvYWsgPSBuZXcgS2V5Y2xvYWsoe1xyXG4gICAgc3RvcmU6IG1lbW9yeVN0b3JlXHJcbn0pO1xyXG5cclxuXHJcblxyXG5jb25zdCBzZXNzaW9uT3B0aW9ucyA9IHtcclxuICAgIHNlY3JldDogJ2QyMTg4NTU2LTI4ZDEtNDQ1Zi04Nzc1LTdmZDY0ZDM0NTdjNicsXHJcbiAgICBiZWFyZXJPbmx5OiB0cnVlLFxyXG4gICAgcmVzYXZlOiBmYWxzZSxcclxuICAgIHNhdmVVbmluaXRpYWxpemVkOiB0cnVlLFxyXG4gICAgc3RvcmU6IG1lbW9yeVN0b3JlXHJcbn07XHJcblxyXG5hcHAudXNlKHNlc3Npb24oc2Vzc2lvbk9wdGlvbnMpKTtcclxuYXBwLnVzZShrZXljbG9hay5taWRkbGV3YXJlKCkpO1xyXG5hcHAudXNlKHJvdXRlcik7XHJcbi8vY2hhcmdlbWVudCBkZSBsJ2FwaSB0ZWFtc1JvdXRlc1xyXG50ZWFtc1JvdXRlcyhhcHAsIHJvdXRlciwga2V5Y2xvYWspO1xyXG5cclxuLy9sYW5jZW1lbnQgZHUgc2VydmV1clxyXG5hcHAubGlzdGVuKDMwMDAsICgpID0+IHtcclxuICAgIGNvbnNvbGUubG9nKCdTZXJ2ZXIgcnVubmluZyBvbiBwb3J0IDMwMDAnKTtcclxufSk7XHJcblxyXG5hcHAudXNlKGJvZHlQYXJzZXIudXJsZW5jb2RlZCh7ZXh0ZW5kZWQ6IGZhbHNlfSkpO1xyXG5hcHAudXNlKGJvZHlQYXJzZXIuanNvbigpKTtcclxuXHJcbi8vY2hhcmdlbWV0biBkZXMgbG9nZ2Vyc1xyXG5sb2dnZXIoKTtcclxuIl19

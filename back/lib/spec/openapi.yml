@@ -1,0 +1,259 @@
+---
+openapi: "3.0.2"
+info:
+  description: "Api team-mgmt"
+  version: "1.0.0"
+  title: "Api for manage project team"
+  termsOfService: ""
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /projects:
+    get:
+      summary: List of projects
+      operationId: listProjects
+      responses:
+        200:
+          description: List of all projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/schemas/Project"
+    post:
+      summary: Add a project
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/schemas/Project"
+      responses:
+        201:
+          description: Project successfully created
+          headers:
+            name: Location
+            description: Location of project created
+            schema:
+              type: string
+  /projects/{id}:
+      get:
+        summary: Get one project by id
+        parameters:
+          - name: id
+            description: id of the project to found
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: Project matching id found
+            content:
+              application/json:
+                schema:
+                  $ref: "#/definitions/schemas/Project"
+          404:
+            description: Project matching id not found
+      put:
+        summary: Modify a project
+        parameters:
+          - name: id
+            description: id of the project to found
+            in: path
+            required: true
+            schema:
+              type: string
+          - name: body
+            in: body
+            required: true
+            schema:
+              $ref: "#/definitions/schemas/Project"
+        responses:
+          200:
+            description: Project successfully modified
+          404:
+            description: Project matching id not found
+
+      delete:
+        summary: Delete one project
+        parameters:
+          - name: id
+            description: id of the project to delete
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: Project successfully deleted
+          404:
+            description: Project matching id not found
+
+  /projects/{id}/teams:
+    get:
+      summary: List of teams of project
+      parameters:
+        - name: id
+          description: id of the project to search
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of teams of project
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/schemas/Team"
+        404:
+          description: No team for this project
+    post:
+      summary: Add a team to a project
+      parameters:
+      - name: id
+        description: id of the project
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/schemas/Team"
+      responses:
+        201:
+          description: Team added successfully
+          headers:
+            name: Location
+            description: Location of team created
+            schema:
+              type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
+        404:
+          description: No project matching id
+        400:
+          description: Error when adding the team
+
+  /teams/{id}:
+    get:
+      summary: Get a team
+      parameters:
+      - name: id
+        description: id of the team to search
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Team matching id found
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
+        404:
+          description: Team matching id not found
+
+    put:
+      summary: Modify a team with his members
+      parameters:
+        - name: id
+          description: id of the team to search
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/schemas/Team"
+      responses:
+        200:
+          description: Team successfully modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/schemas/Team"
+        404:
+          description: Team matching id not found
+        400:
+          description: Error when modifying team
+    delete:
+      summary: Delete a team
+      parameters:
+        - name: id
+          description: id of the team to search
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Team successfully deleted
+        404:
+          description: Team matching id not found
+        400:
+          description: Error when deleting team
+
+definitions:
+  schemas:
+    Project:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          description: id of the project
+        name:
+          type: string
+          description: name of the project
+        description:
+          type: string
+          description: description of the project
+        tenant:
+          type: string
+          description: tenant name of the project
+    Team:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        project:
+          $ref: "#/definitions/schemas/Project"
+        members:
+          type: array
+          items:
+            $ref: "#/definitions/schemas/Employee"
+    Employee:
+      type: "object"
+      required:
+      - id
+      - firstname
+      - lastname
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+
+
+
