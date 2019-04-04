@@ -18,16 +18,21 @@ const keycloak = new Keycloak({
 
 
 const sessionOptions = {
-    secret: 'd2188556-28d1-445f-8775-7fd64d3457c6',
+    secret: '46aa323e-44c2-4793-bfaf-31a1ed42a952',
     bearerOnly: true,
     resave: false,
     saveUninitialized: true,
     store: memoryStore
 };
 
+app.use(bodyParser.json());
+
 app.use(session(sessionOptions));
 app.use(keycloak.middleware());
 app.use(router);
+
+/*app.use(bodyParser.urlencoded({extended: false}));*/
+
 //chargement de l'api teamsRoutes
 teamsRoutes(app, router, keycloak);
 
@@ -36,8 +41,6 @@ app.listen(3000, () => {
     console.log('Server running on port 3000');
 });
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
 
 //chargemetn des loggers
 logger();
