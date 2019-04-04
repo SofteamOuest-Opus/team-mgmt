@@ -13,7 +13,8 @@ const asyncMiddleware = fn => (req, res, next) => {
 export default function (app, router, keycloak) {
 
     router.use((req, res, next) => {
-        //${info.timestamp}-${info.level}-${info.logger}-${info.code}-${info.correlationId}-${info.message}-${info.stackTrace}
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         if (req.method === 'GET' || req.method === 'DELETE') {
             logger.info({message: req.method + req.url});
         } else if (req.method === 'POST' || req.method === 'PUT') {
