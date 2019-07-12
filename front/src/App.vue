@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <login></login>
+<!--        <login></login>-->
         <team-list>
         </team-list>
     </div>

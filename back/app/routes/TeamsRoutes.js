@@ -11,6 +11,10 @@ const asyncMiddleware = fn => (req, res, next) => {
 };
 
 export default function (app, router, keycloak) {
+    var corsOptions = {
+        origin: 'http://example.com',
+        optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    }
 
     router.use((req, res, next) => {
         res.header("Access-Control-Allow-Origin", "*");
@@ -32,7 +36,11 @@ export default function (app, router, keycloak) {
 
 
     router.get('/teams', keycloak.protect(), transactionMiddleware(), asyncMiddleware(async (req, res) => {
+
         let teams = await getAll();
+        res.header("Access-Control-Expose-Headers", "Access-Control-Allow-Origin");
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         res.json(teams);
 
     }));

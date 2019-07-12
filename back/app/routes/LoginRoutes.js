@@ -18,8 +18,8 @@ export default function (app, router, keycloak) {
     });
 
     router.get('/environment', keycloak.protect(), asyncMiddleware(async (req, res) => {
-        var env = {
-          'status' :'connected'
+        let env = await {
+          status :'connected'
         };
         res.json(env);
     }));
