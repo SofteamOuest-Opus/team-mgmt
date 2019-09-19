@@ -33,6 +33,8 @@ podTemplate(label: 'team-mgmt-api-pod', nodeSelector: 'medium', containers: [
 
         def IMAGE = "opus/team-mgmt-api"
 
+        def IMAGE_BDD = "opus/team-mgmt-api"
+
         stage('CHECKOUT') {
             checkout scm
         }
@@ -46,8 +48,11 @@ podTemplate(label: 'team-mgmt-api-pod', nodeSelector: 'medium', containers: [
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
                         sh "docker build . -f Dockerfile --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
+                        sh "docker build . -f docker/bdd/Dockerfile --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
 
                         sh "docker push ${URL}/repository/docker-repository/${IMAGE}:$TAG"
+                        sh "docker push ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
+
                     }
                 }
             }
