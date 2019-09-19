@@ -59,12 +59,12 @@ podTemplate(label: 'team-mgmt-api-pod', nodeSelector: 'medium', containers: [
         }
 
         stage('RUN') {
-            if (BRANCH_NAME == 'develop') {
-                build job: "/SofteamOuest-Opus/chart-run/$BRANCH_NAME",
+
+                build job: "/SofteamOuest-Opus/chart-run/master",
                        wait: false,
                         parameters: [string(name: 'image', value: "$TAG"),
                                     string(name: 'chart', value: "team-mgmt-api")]
-            }
+
        }
 
     }
