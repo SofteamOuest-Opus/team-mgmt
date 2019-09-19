@@ -27,7 +27,7 @@ podTemplate(label: 'team-mgmt-api-pod', nodeSelector: 'medium', containers: [
                 pipelineTriggers([pollSCM('*/1 * * * *')])
         ])
 
-        def TAG = "t$BUILD_NUMBER"
+        def TAG = "$BRANCH_NAME-$BUILD_NUMBER"
 
         def URL = "registry.k8.wildwidewest.xyz"
 
@@ -48,23 +48,24 @@ podTemplate(label: 'team-mgmt-api-pod', nodeSelector: 'medium', containers: [
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
                         sh "docker build . -f Dockerfile --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
-                        sh "docker build . -f docker/bdd/Dockerfile --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
+                        //sh "docker build . -f docker/bdd/Dockerfile --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
 
                         sh "docker push ${URL}/repository/docker-repository/${IMAGE}:$TAG"
-                        sh "docker push ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
+                        //sh "docker push ${URL}/repository/docker-repository/${IMAGE_BDD}:$TAG"
 
                     }
                 }
             }
         }
 
-        //stage('RUN') {
-
-         //   build job: "/SofteamOuest-Opus/chart-run/master",
-        //           wait: false,
-         //           parameters: [string(name: 'image', value: "$TAG"),
-         //                        string(name: 'chart', value: "team-mgmt-api")]
-       // }
+        stage('RUN') {
+            if (BRANCH_NAME == 'develop') {
+                build job: "/SofteamOuest-Opus/chart-run/$BRANCH_NAME",
+                       wait: false,
+                        parameters: [string(name: 'image', value: "$TAG"),
+                                    string(name: 'chart', value: "team-mgmt-api")]
+            }
+       }
 
     }
 }
